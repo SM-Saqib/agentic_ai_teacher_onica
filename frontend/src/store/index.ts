@@ -1,0 +1,21 @@
+import { configureStore } from '@reduxjs/toolkit'
+import authReducer from './slices/authSlice'
+import chatReducer from './slices/chatSlice'
+import slideReducer from './slices/slideSlice'
+import voiceReducer from './slices/voiceSlice'
+import avatarReducer from './slices/avatarSlice'
+import uiReducer from './slices/uiSlice'
+
+export const store = configureStore({
+  reducer: {
+    auth: authReducer,
+    chat: chatReducer,
+    slide: slideReducer,
+    voice: voiceReducer,
+    avatar: avatarReducer,
+    ui: uiReducer,
+  },
+})
+
+export type RootState = ReturnType<typeof store.getState>
+export type AppDispatch = typeof store.dispatch
