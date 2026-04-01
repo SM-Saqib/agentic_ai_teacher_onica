@@ -13,16 +13,27 @@
 - ⚡ **Real-time Communication**: WebSocket-based architecture for instant responses
 - 🏗️ **Modular Architecture**: Zero-cost monolithic backend designed for future microservice extraction
 
-## 📋 Phase 1: Foundation (Complete ✅)
+## 📋 Phase 1-2: Foundation & Chat (Complete ✅)
 
-### ✅ Completed Tasks
+### ✅ Completed Tasks (Phase 1 & 2)
 
-1. **Backend Structure** - FastAPI-based modular architecture with 11+ specialized modules
-2. **Frontend Setup** - React 18 with TypeScript, Redux, and Tailwind CSS
-3. **Database & Models** - PostgreSQL schema with 10+ SQLAlchemy models
-4. **Authentication** - JWT-based access/refresh tokens with secure password hashing
+**Phase 1 - Foundation**
+1. **Backend Structure** - FastAPI-based modular architecture with 15+ specialized modules
+2. **Frontend Setup** - React 18 with TypeScript, Redux Toolkit, and Tailwind CSS
+3. **Database & Models** - PostgreSQL async with 10+ SQLAlchemy models
+4. **JWT Authentication** - Access/refresh tokens with secure password hashing
 5. **WebSocket Infrastructure** - Real-time event-based messaging system
-6. **Docker Compose** - Complete containerized environment (PostgreSQL, Redis, ChromaDB, FastAPI, React)
+6. **Docker Compose** - Containerized environment (PostgreSQL, Redis, ChromaDB, Backend, Frontend)
+
+**Phase 2 - Chat System & LLM Integration**
+1. **Multi-Provider LLM** - Support for Ollama (local) and OpenRouter (cloud/free models)
+2. **Chat Service** - Conversations, message history, context management
+3. **LLM Providers** - Base interface + Ollama + OpenRouter implementations
+4. **Free Model Support** - 13 free OpenRouter models (GPT-OSS, Llama, Mistral, etc.)
+5. **WebSocket Chat** - Real-time streaming responses
+6. **Background Package** - Scripts for data processing, web crawling, vector indexing
+7. **Frontend Chat Components** - ChatWindow, Messages, Input, History, SlideViewer
+8. **Chat API Endpoints** - 5+ REST endpoints for conversation management
 
 ## 🛠 Technology Stack (100% OPEN-SOURCE)
 
@@ -43,30 +54,32 @@
 
 ## 🚀 Getting Started
 
-### Quick Start (Docker)
+### ⚡ Fastest Way: Docker (Recommended)
+**Complete platform in 2 commands:**
 ```bash
-cd /workspaces/agentic_ai_teacher_onica
+# Start all services
 docker-compose up -d
+
+# Run migrations
 docker-compose exec backend alembic upgrade head
-
-# Access:
-# Frontend: http://localhost:3000
-# API Docs: http://localhost:8000/docs
 ```
+Then visit: **http://localhost:3000**
 
-### Local Development
+👉 **[See SETUP_GUIDE.md for details →](./SETUP_GUIDE.md)**
 
-**Backend:**
+### 💻 Local Development Setup
+**Manual setup for customization and development:**
 ```bash
+# Backend (terminal 1)
 cd backend && python -m venv venv && source venv/bin/activate
-pip install -r requirements.txt && alembic upgrade head
+pip install -r requirements.txt
 uvicorn app.main:app --reload
-```
 
-**Frontend:**
-```bash
+# Frontend (terminal 2)
 cd frontend && npm install && npm run dev
 ```
+
+👉 **[Full Backend Setup →](./backend/README.md) | [Full Frontend Setup →](./frontend/README.md)**
 
 ## 📁 Project Structure
 
@@ -99,39 +112,52 @@ QUICKSTART.md        # Getting started guide
 
 ## 📚 Documentation
 
-- **[plan.md](./plan.md)** - Complete development plan with architecture
-- **[QUICKSTART.md](./QUICKSTART.md)** - Quick start guide & troubleshooting
-- **[FastAPI Interactive Docs](http://localhost:8000/docs)** - API documentation
+### Getting Started
+- **[SETUP_GUIDE.md](./SETUP_GUIDE.md)** - 📖 **START HERE!** Complete step-by-step guide to run the entire platform (Docker or local)
+- **[Backend README](./backend/README.md)** - 🔧 Detailed backend setup, configuration, API testing, and troubleshooting
+- **[Frontend README](./frontend/README.md)** - 🎨 Detailed frontend setup, development guide, and deployment
+- **[QUICKSTART.md](./QUICKSTART.md)** - ⚡ Quick reference guide & tips
+
+### Reference
+- **[plan.md](./plan.md)** - 📋 Complete development plan, architecture, and 8-phase roadmap
+- **[FastAPI Interactive Docs](http://localhost:8000/docs)** - 📖 Live API documentation (when server running)
 
 ## 🔄 Development Roadmap
 
-| Phase | Duration | Focus | Status |
-|-------|----------|-------|--------|
-| 1 | Weeks 1-2 | Foundation, Auth, WebSocket | ✅ Complete |
-| 2 | Weeks 3-4 | Chat System LLM Integration | 📅 Next |
-| 3 | Weeks 5-6 | Knowledge Retrieval (RAG) | 📅 Planned |
-| 4 | Weeks 7-8 | Slide Management | 📅 Planned |
-| 5 | Weeks 9-10 | Voice Interface | 📅 Planned |
-| 6 | Weeks 11-12 | Avatar System | 📅 Planned |
-| 7 | Weeks 13-14 | Testing & Optimization | 📅 Planned |
-| 8 | Week 15 | Deployment | 📅 Planned |
+| Phase | Focus | Duration | Status |
+|-------|-------|----------|--------|
+| 1 | Foundation, Auth, WebSocket, DB | Weeks 1-2 | ✅ Complete |
+| 2 | Chat System, LLM Integration, Multi-Provider | Weeks 3-4 | ✅ Complete |
+| 3 | Knowledge Retrieval (RAG), ChromaDB Integration | Weeks 5-6 | 📅 Next |
+| 4 | Slide Management System | Weeks 7-8 | 📅 Planned |
+| 5 | Voice Interface (STT/TTS) | Weeks 9-10 | 📅 Planned |
+| 6 | Avatar System (Tiered) | Weeks 11-12 | 📅 Planned |
+| 7 | Testing & Optimization | Weeks 13-14 | 📅 Planned |
+| 8 | Deployment & Scaling | Week 15 | 📅 Planned |
 
-## 🎯 Key Features (Planned)
+## 🎯 Key Features
 
-### Implemented ✅
-- User registration & login
-- JWT authentication
-- WebSocket real-time communication
-- Database models & migrations
-- Docker containerization
+### Phase 1-2: Implemented ✅
+- ✅ User registration & login with JWT
+- ✅ WebSocket real-time communication
+- ✅ PostgreSQL async database with migrations
+- ✅ Docker containerization (all services)
+- ✅ Chat system with message history
+- ✅ Multi-provider LLM support (Ollama + OpenRouter)
+- ✅ Free OpenRouter models (13+ options)
+- ✅ WebSocket streaming responses
+- ✅ React 18 frontend with TypeScript
+- ✅ Redux state management
+- ✅ Background scripts package (for data processing)
 
-### In Development 📅
-- Chat system with LLM integration
-- Knowledge retrieval (RAG)
+### Phase 3-8: Upcoming 📅
+- Knowledge retrieval system (RAG + ChromaDB)
 - Slide management system
 - Voice interface (STT/TTS)
-- Avatar system (tiered)
-- Advanced analytics
+- Avatar system (tiered: basic → premium → enterprise)
+- Advanced analytics & metrics
+- Performance optimization
+- Production deployment
 
 ## 🤝 Contributing
 

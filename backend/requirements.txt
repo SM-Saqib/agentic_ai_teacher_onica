@@ -20,7 +20,7 @@ sentence-transformers==2.2.2
 numpy==1.26.2
 
 # LLM Integration
-ollama==0.0.51
+ollama>=0.1.0
 requests==2.31.0
 httpx==0.25.2
 
@@ -32,12 +32,10 @@ bcrypt==4.1.1
 pydantic[email]==2.5.0
 
 # Speech Processing
-openai-whisper==20231117
+# openai-whisper==20231117  # Requires compilation, skip for testing
 pyttsx3==2.90
-numpy==1.26.2
 
 # Async/Concurrency
-asyncio==3.4.3
 celery==5.3.4
 
 # Utilities

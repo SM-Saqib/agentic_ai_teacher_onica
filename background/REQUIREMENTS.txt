@@ -1,0 +1,31 @@
+"""Dependencies for Background Package
+
+Install additional dependencies as needed based on which features you use:
+
+# Web Crawling
+pip install beautifulsoup4 selenium requests
+
+# HTTP Client (should already have from main project)
+pip install httpx
+
+# Data Processing
+pip install pandas numpy
+
+# Vector Stores
+pip install chromadb qdrant-client
+
+# Task Queuing (optional, for async task processing)
+pip install celery redis
+
+# PDF Processing (optional)
+pip install pypdf
+
+# Markdown Processing (optional)
+pip install markdown
+
+# Web Scraping Advanced (optional)
+pip install scrapy lxml
+
+All these dependencies are optional - install only what you need for your use case.
+The core background package only requires httpx, which should already be installed.
+"""

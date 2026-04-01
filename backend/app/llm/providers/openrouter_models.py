@@ -1,130 +1,64 @@
-"""OpenRouter Models Configuration - Available models from OpenRouter"""
+"""OpenRouter Models Configuration - Available models from OpenRouter
 
-# OpenRouter API models - Add more models as needed
-# Full list: https://openrouter.ai/api/v1/models
-OPENROUTER_MODELS = {
-    # OpenAI Models
-    "openai/gpt-4": {
-        "name": "OpenAI: GPT-4",
-        "description": "Most capable model, best for complex tasks",
-        "pricing": {
-            "prompt": 0.03,  # per 1K tokens
-            "completion": 0.06,
-        },
-    },
-    "openai/gpt-4-turbo": {
-        "name": "OpenAI: GPT-4 Turbo",
-        "description": "Fast GPT-4 with 128K context",
-        "pricing": {
-            "prompt": 0.01,
-            "completion": 0.03,
-        },
-    },
-    "openai/gpt-3.5-turbo": {
-        "name": "OpenAI: GPT-3.5 Turbo",
-        "description": "Fast and cost-effective",
-        "pricing": {
-            "prompt": 0.0005,
-            "completion": 0.0015,
-        },
-    },
-    # Anthropic Models
-    "anthropic/claude-3-opus": {
-        "name": "Anthropic: Claude 3 Opus",
-        "description": "Most capable Claude model",
-        "pricing": {
-            "prompt": 0.015,
-            "completion": 0.075,
-        },
-    },
-    "anthropic/claude-3-sonnet": {
-        "name": "Anthropic: Claude 3 Sonnet",
-        "description": "Balanced Claude model",
-        "pricing": {
-            "prompt": 0.003,
-            "completion": 0.015,
-        },
-    },
-    "anthropic/claude-3-haiku": {
-        "name": "Anthropic: Claude 3 Haiku",
-        "description": "Fastest Claude model",
-        "pricing": {
-            "prompt": 0.00025,
-            "completion": 0.00125,
-        },
-    },
-    # Google Models
-    "google/gemini-pro": {
-        "name": "Google: Gemini Pro",
-        "description": "Fast general-purpose model",
-        "pricing": {
-            "prompt": 0.000125,
-            "completion": 0.000375,
-        },
-    },
-    # Meta Llama
-    "meta-llama/llama-2-70b-chat": {
-        "name": "Meta: Llama 2 70B Chat",
-        "description": "Open-source large model",
-        "pricing": {
-            "prompt": 0.0007,
-            "completion": 0.0009,
-        },
-    },
-    "meta-llama/llama-2-13b-chat": {
-        "name": "Meta: Llama 2 13B Chat",
-        "description": "Open-source medium model",
-        "pricing": {
-            "prompt": 0.0001,
-            "completion": 0.0001,
-        },
-    },
-    # Mistral
-    "mistralai/mistral-7b-instruct": {
-        "name": "Mistral: 7B Instruct",
-        "description": "Efficient open-source model",
-        "pricing": {
-            "prompt": 0.00014,
-            "completion": 0.00014,
-        },
-    },
-    "mistralai/mistral-large": {
-        "name": "Mistral: Large",
-        "description": "Powerful instruction-tuned model",
-        "pricing": {
-            "prompt": 0.008,
-            "completion": 0.024,
-        },
-    },
-    # NousResearch
-    "nousresearch/nous-hermes-2-mistral-7b-dpo": {
-        "name": "NousResearch: Hermes 2 7B",
-        "description": "Quality open-source model",
-        "pricing": {
-            "prompt": 0.00018,
-            "completion": 0.00018,
-        },
-    },
-}
+Free models are available on OpenRouter with no cost (rate-limited).
+Full list: https://openrouter.ai/api/v1/models
+"""
+
+# Free models available on OpenRouter (no cost, rate-limited)
+FREE_MODELS = [
+    # 🔁 Router (recommended fallback)
+    "openrouter/free",
+
+    # 🧠 General / reasoning
+    "openai/gpt-oss-120b:free",
+    "z-ai/glm-4.5-air:free",
+
+    # ⚡ Fast / cheap inference
+    "stepfun/step-3.5-flash:free",
+
+    # 🧠 NVIDIA Nemotron family
+    "nvidia/nemotron-3-nano-30b-a3b:free",
+    "nvidia/nemotron-3-super:free",
+
+    # 🧪 Arcee models
+    "arcee-ai/trinity-mini:free",
+    "arcee-ai/trinity-large-preview:free",
+
+    # 💻 Coding / heavy models
+    "qwen/qwen3-coder-480b-a35b-instruct:free",
+
+    # 🧠 Meta (Llama family - free variants rotate but commonly available)
+    "meta-llama/llama-3.3-70b-instruct:free",
+
+    # 🧪 Other commonly routed free models (availability may vary)
+    "deepseek/deepseek-r1:free",
+]
 
 
 def get_model_id(model_key: str) -> str:
-    """Get the full model ID from the key"""
-    if model_key in OPENROUTER_MODELS:
+    """Get the full model ID if it exists in FREE_MODELS"""
+    if model_key in FREE_MODELS:
         return model_key
     return None
 
 
 def get_all_model_ids() -> list:
-    """Get list of all available model IDs"""
-    return list(OPENROUTER_MODELS.keys())
+    """Get list of all available free model IDs"""
+    return FREE_MODELS.copy()
 
 
 def get_model_info(model_key: str) -> dict:
     """Get information about a specific model"""
-    return OPENROUTER_MODELS.get(model_key, {})
+    if model_key in FREE_MODELS:
+        return {
+            "id": model_key,
+            "name": model_key,
+            "description": "Free OpenRouter model",
+            "pricing": "FREE",
+        }
+    return {}
 
 
 def is_valid_model(model_key: str) -> bool:
-    """Check if a model ID is valid"""
-    return model_key in OPENROUTER_MODELS
+    """Check if a model ID is a valid free model"""
+    return model_key in FREE_MODELS
