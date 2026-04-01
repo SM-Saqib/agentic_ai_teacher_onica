@@ -12,7 +12,7 @@ from app.database.connection import init_db, close_db
 from app.core.exceptions import AITeacherException
 
 # Import routers
-from app.api.v1.routes import auth, health
+from app.api.v1.routes import auth, health, chat, slides
 from app.api.v1.websocket import router as ws_router
 
 # Configure logging
@@ -69,6 +69,8 @@ async def ai_teacher_exception_handler(request, exc: AITeacherException):
 
 # Include routers
 app.include_router(auth.router)
+app.include_router(chat.router)
+app.include_router(slides.router)
 app.include_router(health.router)
 app.include_router(ws_router.router)
 

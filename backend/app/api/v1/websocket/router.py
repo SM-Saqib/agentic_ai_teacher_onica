@@ -6,11 +6,15 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.websocket.manager import manager
 from app.websocket.middleware import validate_websocket_token, generate_connection_id
+from app.websocket.handlers import register_chat_handlers
 from app.core.dependencies import get_db
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/ws/v1", tags=["websocket"])
+
+# Register handlers on module load
+register_chat_handlers()
 
 
 @router.websocket("/chat/{token}")
@@ -21,6 +25,7 @@ async def chat_websocket(
 ):
     """WebSocket endpoint for chat"""
     connection_id = generate_connection_id()
+    user_id = None
     
     try:
         # Validate token and extract user info
@@ -58,8 +63,10 @@ async def chat_websocket(
     
     except WebSocketDisconnect:
         logger.info(f"WebSocket disconnected: {connection_id}")
-        manager.disconnect(connection_id, user_id if 'user_id' in locals() else None)
+        if user_id:
+            manager.disconnect(connection_id, user_id)
     except Exception as e:
         logger.error(f"WebSocket error: {e}")
         if connection_id in manager.active_connections:
-            manager.disconnect(connection_id, user_id if 'user_id' in locals() else None)
+            manager.disconnect(connection_id, user_id if user_id else None)
+

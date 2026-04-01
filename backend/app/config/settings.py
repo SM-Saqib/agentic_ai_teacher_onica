@@ -34,10 +34,16 @@ class Settings(BaseSettings):
     VECTOR_STORE_PORT: int = int(os.getenv("VECTOR_STORE_PORT", 6333))
     CHROMADB_PERSIST_DIRECTORY: str = os.getenv("CHROMADB_PERSIST_DIRECTORY", "./data/chromadb")
 
-    # LLM
-    LLM_PROVIDER: str = os.getenv("LLM_PROVIDER", "ollama")  # ollama, huggingface
+    # LLM Provider
+    LLM_PROVIDER: str = os.getenv("LLM_PROVIDER", "ollama")  # ollama, openrouter
+    
+    # Ollama Configuration
     OLLAMA_BASE_URL: str = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
     OLLAMA_MODEL: str = os.getenv("OLLAMA_MODEL", "mistral")
+    
+    # OpenRouter Configuration
+    OPENROUTER_API_KEY: str = os.getenv("OPENROUTER_API_KEY", "")
+    OPENROUTER_MODEL: str = os.getenv("OPENROUTER_MODEL", "openai/gpt-3.5-turbo")
     
     # Embeddings
     EMBEDDING_MODEL: str = os.getenv("EMBEDDING_MODEL", "all-MiniLM-L6-v2")

@@ -1,41 +1,41 @@
+import React, { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
+import { ChatWindow } from '../components/chat/ChatWindow'
+import { ChatHistory } from '../components/chat/ChatHistory'
+import { SlideViewer } from '../components/slides/SlideViewer'
+import { useChat } from '../hooks/useChat'
+import { AppDispatch } from '../store'
+
 export default function TeachingPage() {
+  const dispatch = useDispatch<AppDispatch>()
+  const { currentConversation, createConversation } = useChat()
+
+  useEffect(() => {
+    // Create initial conversation if none exists
+    if (!currentConversation) {
+      createConversation('Teaching Session').catch((error) => {
+        console.error('Failed to create conversation:', error)
+      })
+    }
+  }, [])
+
   return (
     <div className="h-screen w-screen bg-gray-50 flex">
-      {/* Sidebar */}
-      <div className="w-64 bg-white border-r border-gray-200">
-        <div className="p-6 border-b border-gray-200">
-          <h2 className="text-xl font-bold">AI Teacher</h2>
-        </div>
-        <nav className="p-4">
-          <p className="text-gray-500 text-sm">Navigation coming soon...</p>
-        </nav>
+      {/* Sidebar - Conversation History */}
+      <div className="w-64 bg-white border-r border-gray-200 overflow-hidden">
+        <ChatHistory />
       </div>
 
-      {/* Main Content */}
-      <div className="flex-1 flex">
+      {/* Main Content Area */}
+      <div className="flex-1 flex gap-4 p-4">
         {/* Slide Panel */}
-        <div className="flex-1 bg-white border-r border-gray-200 p-6">
-          <h3 className="text-2xl font-bold mb-4">Slide Viewer</h3>
-          <div className="bg-gray-100 rounded-lg h-96 flex items-center justify-center">
-            <p className="text-gray-500">Slide content will appear here</p>
-          </div>
+        <div className="flex-1 bg-white rounded-lg shadow">
+          <SlideViewer />
         </div>
 
         {/* Chat Panel */}
-        <div className="w-96 bg-white flex flex-col">
-          <div className="p-4 border-b border-gray-200">
-            <h3 className="font-bold">Chat with AI Teacher</h3>
-          </div>
-          <div className="flex-1 p-4 overflow-y-auto">
-            <p className="text-gray-500 text-sm">Chat messages will appear here</p>
-          </div>
-          <div className="p-4 border-t border-gray-200">
-            <input
-              type="text"
-              placeholder="Ask a question..."
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
+        <div className="w-96 bg-white rounded-lg shadow flex flex-col overflow-hidden">
+          <ChatWindow />
         </div>
       </div>
     </div>
