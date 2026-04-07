@@ -9,6 +9,7 @@ from app.database.models import Conversation, Message, Slide
 from app.core.exceptions import ConversationNotFound, SlideNotFound
 from app.llm.client import llm_client
 from app.llm.prompts import format_chat_prompt
+from app.vector_store import chroma_store
 from app.config.constants import DEFAULT_CHAT_MAX_TOKENS, DEFAULT_CHAT_TEMPERATURE
 
 logger = logging.getLogger(__name__)
@@ -118,6 +119,44 @@ class ChatService:
         return context
 
     @staticmethod
+    async def get_enhanced_context(
+        question: str,
+        slide_id: Optional[int] = None,
+        n_results: int = 3,
+    ) -> str:
+        """Get enhanced context using vector similarity search"""
+        try:
+            # Search for similar content
+            search_results = await chroma_store.search_similar(
+                query=question,
+                n_results=n_results,
+                where={"type": "slide"} if slide_id is None else {"type": "slide", "slide_id": str(slide_id)}
+            )
+
+            if not search_results:
+                logger.info("No similar content found in vector store")
+                return ""
+
+            # Combine relevant content
+            context_parts = []
+            for result in search_results:
+                metadata = result.get("metadata", {})
+                content = result.get("content", "")
+
+                # Format context with title and content
+                title = metadata.get("title", "Unknown Slide")
+                context_parts.append(f"Related Slide: {title}\n{content}")
+
+            enhanced_context = "\n\n---\n\n".join(context_parts)
+            logger.info(f"Retrieved {len(search_results)} similar documents for context")
+
+            return enhanced_context
+
+        except Exception as e:
+            logger.error(f"Error retrieving enhanced context: {e}")
+            return ""
+
+    @staticmethod
     async def generate_response(
         question: str,
         conversation_id: int,
@@ -128,6 +167,29 @@ class ChatService:
     ) -> Tuple[str, Optional[int]]:
         """Generate an AI response to a question"""
         try:
+            # Get conversation to check if it has a slide
+            result = await db.execute(
+                select(Conversation).where(Conversation.id == conversation_id)
+            )
+            conversation = result.scalars().first()
+            if not conversation:
+                raise ConversationNotFound(conversation_id)
+
+            # Get enhanced context from vector store
+            enhanced_context = await ChatService.get_enhanced_context(
+                question=question,
+                slide_id=conversation.slide_id,
+                n_results=3
+            )
+
+            # Combine static context (if any) with enhanced context
+            full_context = context or ""
+            if enhanced_context:
+                if full_context:
+                    full_context += "\n\n--- Additional Context ---\n\n" + enhanced_context
+                else:
+                    full_context = enhanced_context
+
             # Get conversation history
             messages = await ChatService.get_conversation_messages(
                 conversation_id,
@@ -144,7 +206,7 @@ class ChatService:
             # Format the prompt with context
             prompt = format_chat_prompt(
                 question=question,
-                context=context,
+                context=full_context,
                 conversation_history=message_dicts,
             )
 
@@ -176,6 +238,29 @@ class ChatService:
     ):
         """Stream an AI response (for WebSocket)"""
         try:
+            # Get conversation to check if it has a slide
+            result = await db.execute(
+                select(Conversation).where(Conversation.id == conversation_id)
+            )
+            conversation = result.scalars().first()
+            if not conversation:
+                raise ConversationNotFound(conversation_id)
+
+            # Get enhanced context from vector store
+            enhanced_context = await ChatService.get_enhanced_context(
+                question=question,
+                slide_id=conversation.slide_id,
+                n_results=3
+            )
+
+            # Combine static context (if any) with enhanced context
+            full_context = context or ""
+            if enhanced_context:
+                if full_context:
+                    full_context += "\n\n--- Additional Context ---\n\n" + enhanced_context
+                else:
+                    full_context = enhanced_context
+
             # Get conversation history
             messages = await ChatService.get_conversation_messages(
                 conversation_id,
@@ -192,7 +277,7 @@ class ChatService:
             # Format the prompt with context
             prompt = format_chat_prompt(
                 question=question,
-                context=context,
+                context=full_context,
                 conversation_history=message_dicts,
             )
 

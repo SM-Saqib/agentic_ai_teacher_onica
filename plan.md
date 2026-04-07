@@ -450,12 +450,14 @@ Index: "explanations"
 - [ ] Store chat history in database
 - [ ] Build chat UI components
 
-### Phase 3: Knowledge & Retrieval (Weeks 5-6)
-- [ ] Set up vector store (Qdrant / Milvus / ChromaDB - all open-source)
-- [ ] Implement RAG retrieval system
-- [ ] Index pre-built slide explanations
-- [ ] Implement semantic search
-- [ ] Knowledge repository service
+### Phase 3: Knowledge & Retrieval (Weeks 5-6) ✅ COMPLETED
+- [x] Set up vector store (ChromaDB - open-source)
+- [x] Implement RAG retrieval system
+- [x] Index pre-built slide explanations
+- [x] Implement semantic search
+- [x] Knowledge repository service
+- [x] Background indexing scripts
+- [x] Enhanced chat prompts with context
 
 ### Phase 4: Slide Management (Weeks 7-8)
 - [ ] Build slide database & repository
